@@ -17,7 +17,7 @@ namespace Tjeker.Images
         private readonly Func<double, double> _countResolve;
 
         public ImagesFromVideo(string videoPath, string saveFolder, int count)
-            : this(videoPath, saveFolder, secondDuration => count)
+            : this(videoPath, saveFolder, millisecondDuration => count)
         {
             
         }
@@ -41,13 +41,13 @@ namespace Tjeker.Images
                 {
                     engine.GetMetadata(video);
                     
-                    var secondDuration = video.Metadata.Duration.TotalSeconds;
-                    var frameCount = _countResolve.Invoke(secondDuration);
+                    var milliseconds = video.Metadata.Duration.TotalMilliseconds - 600;
+                    var frameCount = _countResolve.Invoke(milliseconds);
                     
                     for (var index = 1; index <= frameCount; index++)
                     {
-                        var secondOffset = TimeSpan.FromSeconds(
-                            secondDuration / frameCount * index
+                        var secondOffset = TimeSpan.FromMilliseconds(
+                            milliseconds / frameCount * index
                         );
                         paths.Add(SaveImage(video, secondOffset, engine));
                     }

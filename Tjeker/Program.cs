@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Tjeker.Images;
+using Tjeker.Processing;
 
 namespace Tjeker
 {
@@ -10,15 +12,14 @@ namespace Tjeker
         static async Task Main(string[] args)
         {
             var currentDirectory = Directory.GetCurrentDirectory() + @"\..\..\..\";
-            var images = await new ImagesFromVideo(
-                Path.Combine(currentDirectory, "sadness.mp4"),
-                Path.Combine(currentDirectory, "assets"),
-                10
+            var path = await new MergedImages(
+                new ImagesFromVideo(
+                    Path.Combine(currentDirectory, "sadness.mp4"),
+                    Path.Combine(currentDirectory, "assets"),
+                    3
+                ),
+                Path.Combine(currentDirectory, "assets")
             ).Save();
-            foreach (var image in images)
-            {
-                Console.WriteLine(image);
-            }
         }
     }
 }
